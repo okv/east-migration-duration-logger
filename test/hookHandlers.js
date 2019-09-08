@@ -41,7 +41,7 @@ describe('register function hook handlers', () => {
 		return libModule.register({migratorHooks});
 	};
 
-	describe('beforeMigrate and afterMigrate handlers', () => {
+	describe('beforeMigrate and afterMigrate with migration logger', () => {
 		before(beforeDescribe);
 
 		it('shoud be attached to migrator hooks after register', () => {
@@ -67,7 +67,28 @@ describe('register function hook handlers', () => {
 		});
 	});
 
-	describe('beforeMigrate and migrateError handlers', () => {
+	describe('beforeMigrate and afterMigrate with console logger', () => {
+		before(beforeDescribe);
+
+		before(() => {
+			delete handlerParams.migrationParams.logger;
+		});
+
+		it('shoud be attached to migrator hooks after register', () => {
+			expect(hookActionHandlersMap).keys(['beforeMigrate', 'afterMigrate']);
+		});
+
+
+		it('beforeMigrate should be done without errors', () => {
+			return hookActionHandlersMap.beforeMigrate();
+		});
+
+		it('afterMigrate should be done without errors', () => {
+			return hookActionHandlersMap.afterMigrate(handlerParams);
+		});
+	});
+
+	describe('beforeMigrate and migrateError with migration logger', () => {
 		before(beforeDescribe);
 
 		it('shoud be attached to migrator hooks after register', () => {
@@ -92,7 +113,27 @@ describe('register function hook handlers', () => {
 		});
 	});
 
-	describe('beforeRollback and afterRollback handlers', () => {
+	describe('beforeMigrate and migrateError with console logger', () => {
+		before(beforeDescribe);
+
+		before(() => {
+			delete handlerParams.migrationParams.logger;
+		});
+
+		it('shoud be attached to migrator hooks after register', () => {
+			expect(hookActionHandlersMap).keys(['beforeMigrate', 'migrateError']);
+		});
+
+		it('beforeMigrate should be done without errors', () => {
+			return hookActionHandlersMap.beforeMigrate();
+		});
+
+		it('migrateError should be done without errors', () => {
+			return hookActionHandlersMap.migrateError(handlerParams);
+		});
+	});
+
+	describe('beforeRollback and afterRollback with migration logger', () => {
 		before(beforeDescribe);
 
 		it('shoud be attached to migrator hooks after register', () => {
@@ -117,7 +158,27 @@ describe('register function hook handlers', () => {
 		});
 	});
 
-	describe('beforeRollback and rollbackError handlers', () => {
+	describe('beforeRollback and afterRollback with console logger', () => {
+		before(beforeDescribe);
+
+		before(() => {
+			delete handlerParams.migrationParams.logger;
+		});
+
+		it('shoud be attached to migrator hooks after register', () => {
+			expect(hookActionHandlersMap).keys(['beforeRollback', 'afterRollback']);
+		});
+
+		it('beforeRollback should be done without errors', () => {
+			return hookActionHandlersMap.beforeRollback();
+		});
+
+		it('afterRollback should be done without errors', () => {
+			return hookActionHandlersMap.afterRollback(handlerParams);
+		});
+	});
+
+	describe('beforeRollback and rollbackError with migration logger', () => {
 		before(beforeDescribe);
 
 		it('shoud be attached to migrator hooks after register', () => {
@@ -139,6 +200,26 @@ describe('register function hook handlers', () => {
 			);
 
 			expect(loggedMessage).match(messageRegExp);
+		});
+	});
+
+	describe('beforeRollback and rollbackError with console logger', () => {
+		before(beforeDescribe);
+
+		before(() => {
+			delete handlerParams.migrationParams.logger;
+		});
+
+		it('shoud be attached to migrator hooks after register', () => {
+			expect(hookActionHandlersMap).keys(['beforeRollback', 'rollbackError']);
+		});
+
+		it('beforeRollback should be done without errors', () => {
+			return hookActionHandlersMap.beforeRollback();
+		});
+
+		it('rollbackError should be done without errors', () => {
+			return hookActionHandlersMap.rollbackError(handlerParams);
 		});
 	});
 });
