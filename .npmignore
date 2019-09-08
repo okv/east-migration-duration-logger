@@ -1,0 +1,8 @@
+.npmignore
+test
+testUtils
+.eslintignore
+.eslintrc
+.travis.yml
+.nyc_output
+coverage
