@@ -31,7 +31,7 @@
   },
   "homepage": "https://github.com/okv/east-migration-duration-logger#readme",
   "peerDependencies": {
-    "east": ">=1.1.0 <2.0.0"
+    "east": ">=1.2.0-rc.1 <2.0.0"
   },
   "devDependencies": {
     "coveralls": "3.0.6",
