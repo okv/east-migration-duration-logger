@@ -6,6 +6,7 @@
   "scripts": {
     "testSpecified": "tap --reporter spec --no-coverage --color --timeout 10 --bail --jobs-auto",
     "test": "npm run testSpecified test",
+    "testWithNode": "for file in `find test -name *.js`; do node \"$file\" || exit 1; done;",
     "makeTestSnapshots": "TAP_SNAPSHOT=1 npm run testSpecified test",
     "makeCodeCoverageDetailReport": "npm run testSpecified test -- --reporter dot --coverage --coverage-report html --no-browser test && echo \"*** Code coverage report done, checkout ./coverage dir\"",
     "makeCodeCoverageSummaryReport": "npm run testSpecified test -- --reporter dot --coverage --coverage-report text-summary test | sed -re 's/(Statements|Branches|Functions|Lines)/\\1 code coverage/g'",
