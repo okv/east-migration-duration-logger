@@ -12,32 +12,26 @@ node_js:
 
 script:
     - >
-      nodeVersionMajor=`node -e "console.log(process.versions.node.split('.')[0])"`;
+      nodeVersionMajor=`node --version | grep -Eo 'v[0-9]+' | sed 's/v//'`;
 
       if [ $nodeVersionMajor -eq 14 ]; then
-        npm audit --prod;
-      else
-        echo "*** Do not run \`npm audit\` for non node.js 14 builds ($nodeVersionMajor)";
+        npm run lint
       fi;
 
-    - npm run lint
-
     - >
-      nodeVersionMajor=`node -e "console.log(process.versions.node.split('.')[0])"`;
+      nodeVersionMajor=`node --version | grep -Eo 'v[0-9]+' | sed 's/v//'`;
 
       if [ $nodeVersionMajor -gt 4 ]; then
         npm test;
       else
-        npm run testWithNode;
+        npm run testWithoutBail;
       fi;
 
     - >
       nodeVersionMajor=`node -e "console.log(process.versions.node.split('.')[0])"`;
 
       if [ $nodeVersionMajor -eq 14 ]; then
-        npm run makeCodeCoverageSummaryReport;
-        npm run makeCodeCoverageDetailReport;
-        coveralls < coverage/lcov.info;
+        echo "TODO: coverage needs to be fixed...";
       else
         echo "*** Do not make coverage reports for non node.js 14 builds ($nodeVersionMajor)";
       fi;
