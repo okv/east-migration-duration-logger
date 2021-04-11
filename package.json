@@ -4,9 +4,7 @@
   "description": "East plugin which logs duration of every migration",
   "main": "lib/index.js",
   "scripts": {
-    "testSpecified": "tap --reporter spec --no-coverage --color --timeout 10 --bail --jobs-auto",
-    "test": "tape \"test/**/*.test.js\" | tap_bail | tap-dot",
-    "testWithoutBail": "tape \"test/**/*.test.js\" | tap-dot",
+    "test": "tape \"test/**/*.test.js\" | tap-summary",
     "coverage": "c8 --reporter text-summary --reporter html --reporter lcov npm test",
     "lint": "eslint ./"
   },
@@ -39,6 +37,7 @@
     "eslint-config-airbnb-base": "12.1.0",
     "eslint-plugin-import": "2.18.2",
     "tap-dot": "2.0.0",
+    "tap-summary": "4.0.0",
     "tap_bail": "1.0.1",
     "tape": "5.2.2"
   },

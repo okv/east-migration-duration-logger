@@ -3,182 +3,178 @@
 const test = require('tape');
 const libModule = require('../lib');
 
-test('register function hook handlers', (rootAssert) => {
-	let hookActionHandlersMap;
-	let migratorHooks;
-	let handlerParams;
-	let migrationParamsLogger;
-	let loggedMessage;
+let hookActionHandlersMap;
+let migratorHooks;
+let handlerParams;
+let migrationParamsLogger;
+let loggedMessage;
 
-	const setup = () => {
-		hookActionHandlersMap = {};
+const setup = () => {
+	hookActionHandlersMap = {};
 
-		migratorHooks = {
-			on: (actionName, handler) => {
-				if (hookActionHandlersMap[actionName]) {
-					throw new Error(
-						`Handler for action ${actionName} already provided`
-					);
-				}
-				hookActionHandlersMap[actionName] = handler;
+	migratorHooks = {
+		on: (actionName, handler) => {
+			if (hookActionHandlersMap[actionName]) {
+				throw new Error(
+					`Handler for action ${actionName} already provided`
+				);
 			}
-		};
-
-		migrationParamsLogger = {
-			log: (message) => {
-				loggedMessage = message;
-			}
-		};
-
-		handlerParams = {
-			migration: {name: '999_test'},
-			migrationParams: {logger: migrationParamsLogger}
-		};
-
-		libModule.register({migratorHooks});
+			hookActionHandlersMap[actionName] = handler;
+		}
 	};
 
-	test.test('beforeMigrate, afterMigrate with migration logger', (assert) => {
-		setup();
+	migrationParamsLogger = {
+		log: (message) => {
+			loggedMessage = message;
+		}
+	};
 
-		const actionNames = Object.keys(hookActionHandlersMap);
-		assert.ok(actionNames.indexOf('beforeMigrate') !== -1);
-		assert.ok(actionNames.indexOf('afterMigrate') !== -1);
+	handlerParams = {
+		migration: {name: '999_test'},
+		migrationParams: {logger: migrationParamsLogger}
+	};
 
-		assert.doesNotThrow(
-			() => hookActionHandlersMap.beforeMigrate(),
-			'beforeMigrate should be done without errors'
-		);
+	libModule.register({migratorHooks});
+};
 
-		assert.doesNotThrow(
-			() => hookActionHandlersMap.afterMigrate(handlerParams),
-			'afterMigrate should be done without errors'
-		);
+test('Hook handlers: beforeMigrate, afterMigrate with logger ', (assert) => {
+	setup();
 
-		const messageRegExp = new RegExp(
-			`Action migrate of "${handlerParams.migration.name}" ` +
-			'done in \\d+ms'
-		);
-		assert.match(
-			loggedMessage,
-			messageRegExp,
-			'afterMigrate log migrate action duration'
-		);
+	const actionNames = Object.keys(hookActionHandlersMap);
+	assert.ok(actionNames.indexOf('beforeMigrate') !== -1);
+	assert.ok(actionNames.indexOf('afterMigrate') !== -1);
 
-		assert.end();
-	});
+	assert.doesNotThrow(
+		() => hookActionHandlersMap.beforeMigrate(),
+		'beforeMigrate should be done without errors'
+	);
 
-	test.test('beforeMigrate, migrateError with migration logger', (assert) => {
-		setup();
+	assert.doesNotThrow(
+		() => hookActionHandlersMap.afterMigrate(handlerParams),
+		'afterMigrate should be done without errors'
+	);
 
-		const actionNames = Object.keys(hookActionHandlersMap);
-		assert.ok(actionNames.indexOf('beforeMigrate') !== -1);
-		assert.ok(actionNames.indexOf('migrateError') !== -1);
+	const messageRegExp = new RegExp(
+		`Action migrate of "${handlerParams.migration.name}" ` +
+		'done in \\d+ms'
+	);
+	assert.match(
+		loggedMessage,
+		messageRegExp,
+		'afterMigrate log migrate action duration'
+	);
 
-		assert.doesNotThrow(
-			() => hookActionHandlersMap.beforeMigrate(),
-			'beforeMigrate should be done without errors'
-		);
+	assert.end();
+});
 
-		assert.doesNotThrow(
-			() => hookActionHandlersMap.migrateError(handlerParams),
-			'migrateError should be done without errors'
-		);
+test('Hook handlers: beforeMigrate, migrateError with logger', (assert) => {
+	setup();
 
-		const messageRegExp = new RegExp(
-			`Action migrate of "${handlerParams.migration.name}" ` +
-			'failed in \\d+ms'
-		);
-		assert.match(
-			loggedMessage,
-			messageRegExp,
-			'migrateError log migrate action duration'
-		);
+	const actionNames = Object.keys(hookActionHandlersMap);
+	assert.ok(actionNames.indexOf('beforeMigrate') !== -1);
+	assert.ok(actionNames.indexOf('migrateError') !== -1);
 
-		assert.end();
-	});
+	assert.doesNotThrow(
+		() => hookActionHandlersMap.beforeMigrate(),
+		'beforeMigrate should be done without errors'
+	);
 
-	test.test('beforeRollback, afterRollback with migration logger', (assert) => {
-		setup();
+	assert.doesNotThrow(
+		() => hookActionHandlersMap.migrateError(handlerParams),
+		'migrateError should be done without errors'
+	);
 
-		const actionNames = Object.keys(hookActionHandlersMap);
-		assert.ok(actionNames.indexOf('beforeRollback') !== -1);
-		assert.ok(actionNames.indexOf('afterRollback') !== -1);
+	const messageRegExp = new RegExp(
+		`Action migrate of "${handlerParams.migration.name}" ` +
+		'failed in \\d+ms'
+	);
+	assert.match(
+		loggedMessage,
+		messageRegExp,
+		'migrateError log migrate action duration'
+	);
 
-		assert.doesNotThrow(
-			() => hookActionHandlersMap.beforeRollback(),
-			'beforeRollback should be done without errors'
-		);
+	assert.end();
+});
 
-		assert.doesNotThrow(
-			() => hookActionHandlersMap.afterRollback(handlerParams),
-			'afterRollback should be done without errors'
-		);
+test('Hook handlers: beforeRollback, afterRollback with logger', (assert) => {
+	setup();
 
-		const messageRegExp = new RegExp(
-			`Action rollback of "${handlerParams.migration.name}" ` +
-			'done in \\d+ms'
-		);
-		assert.match(
-			loggedMessage,
-			messageRegExp,
-			'afterRollback log rollback action duration'
-		);
+	const actionNames = Object.keys(hookActionHandlersMap);
+	assert.ok(actionNames.indexOf('beforeRollback') !== -1);
+	assert.ok(actionNames.indexOf('afterRollback') !== -1);
 
-		assert.end();
-	});
+	assert.doesNotThrow(
+		() => hookActionHandlersMap.beforeRollback(),
+		'beforeRollback should be done without errors'
+	);
 
-	test.test('beforeRollback, rollbackError with migration logger', (assert) => {
-		setup();
+	assert.doesNotThrow(
+		() => hookActionHandlersMap.afterRollback(handlerParams),
+		'afterRollback should be done without errors'
+	);
 
-		const actionNames = Object.keys(hookActionHandlersMap);
-		assert.ok(actionNames.indexOf('beforeRollback') !== -1);
-		assert.ok(actionNames.indexOf('rollbackError') !== -1);
+	const messageRegExp = new RegExp(
+		`Action rollback of "${handlerParams.migration.name}" ` +
+		'done in \\d+ms'
+	);
+	assert.match(
+		loggedMessage,
+		messageRegExp,
+		'afterRollback log rollback action duration'
+	);
 
-		assert.doesNotThrow(
-			() => hookActionHandlersMap.beforeRollback(),
-			'beforeRollback should be done without errors'
-		);
+	assert.end();
+});
 
-		assert.doesNotThrow(
-			() => hookActionHandlersMap.rollbackError(handlerParams),
-			'rollbackError should be done without errors'
-		);
+test('Hook handlers: beforeRollback, rollbackError with logger', (assert) => {
+	setup();
 
-		const messageRegExp = new RegExp(
-			`Action rollback of "${handlerParams.migration.name}" ` +
-			'failed in \\d+ms'
-		);
-		assert.match(
-			loggedMessage,
-			messageRegExp,
-			'rollbackError log rollback action duration'
-		);
+	const actionNames = Object.keys(hookActionHandlersMap);
+	assert.ok(actionNames.indexOf('beforeRollback') !== -1);
+	assert.ok(actionNames.indexOf('rollbackError') !== -1);
 
-		assert.end();
-	});
+	assert.doesNotThrow(
+		() => hookActionHandlersMap.beforeRollback(),
+		'beforeRollback should be done without errors'
+	);
 
-	// this must be true for this and all other pair of handlers
-	test.test('some handlers pair with console logger', (assert) => {
-		setup();
-		delete handlerParams.migrationParams.logger;
+	assert.doesNotThrow(
+		() => hookActionHandlersMap.rollbackError(handlerParams),
+		'rollbackError should be done without errors'
+	);
 
-		const actionNames = Object.keys(hookActionHandlersMap);
-		assert.ok(actionNames.indexOf('beforeMigrate') !== -1);
-		assert.ok(actionNames.indexOf('afterMigrate') !== -1);
+	const messageRegExp = new RegExp(
+		`Action rollback of "${handlerParams.migration.name}" ` +
+		'failed in \\d+ms'
+	);
+	assert.match(
+		loggedMessage,
+		messageRegExp,
+		'rollbackError log rollback action duration'
+	);
 
-		assert.doesNotThrow(
-			() => hookActionHandlersMap.beforeMigrate(),
-			'beforeMigrate should be done without errors'
-		);
+	assert.end();
+});
 
-		assert.doesNotThrow(
-			() => hookActionHandlersMap.afterMigrate(handlerParams),
-			'afterMigrate should be done without errors'
-		);
+// this must be true for this and all other pair of handlers
+test.test('Hook handlers: some handlers pair with console logger', (assert) => {
+	setup();
+	delete handlerParams.migrationParams.logger;
 
-		assert.end();
-	});
+	const actionNames = Object.keys(hookActionHandlersMap);
+	assert.ok(actionNames.indexOf('beforeMigrate') !== -1);
+	assert.ok(actionNames.indexOf('afterMigrate') !== -1);
 
-	rootAssert.end();
+	assert.doesNotThrow(
+		() => hookActionHandlersMap.beforeMigrate(),
+		'beforeMigrate should be done without errors'
+	);
+
+	assert.doesNotThrow(
+		() => hookActionHandlersMap.afterMigrate(handlerParams),
+		'afterMigrate should be done without errors'
+	);
+
+	assert.end();
 });

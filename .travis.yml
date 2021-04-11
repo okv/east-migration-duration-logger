@@ -19,8 +19,6 @@ script:
         npm test;
         npm run coverage;
         coveralls < coverage/lcov.info;
-      elif [ $nodeVersionMajor -gt 4 ]; then
-        npm test;
       else
-        npm run testWithoutBail;
+        npm run test;
       fi;
