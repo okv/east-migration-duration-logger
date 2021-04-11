@@ -36,9 +36,7 @@
     "eslint": "4.19.1",
     "eslint-config-airbnb-base": "12.1.0",
     "eslint-plugin-import": "2.18.2",
-    "tap-dot": "2.0.0",
     "tap-summary": "4.0.0",
-    "tap_bail": "1.0.1",
     "tape": "5.2.2"
   },
   "engines": {
