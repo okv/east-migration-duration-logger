@@ -8,9 +8,6 @@
     "test": "tape \"test/**/*.test.js\" | tap_bail | tap-dot",
     "testWithoutBail": "tape \"test/**/*.test.js\" | tap-dot",
     "coverage": "c8 --reporter text-summary --reporter html --reporter lcov npm test",
-    "makeTestSnapshots": "TAP_SNAPSHOT=1 npm run testSpecified test",
-    "makeCodeCoverageDetailReport": "npm run testSpecified test -- --reporter dot --coverage --coverage-report html --no-browser test && echo \"*** Code coverage report done, checkout ./coverage dir\"",
-    "makeCodeCoverageSummaryReport": "npm run testSpecified test -- --reporter dot --coverage --coverage-report text-summary test | sed -re 's/(Statements|Branches|Functions|Lines)/\\1 code coverage/g'",
     "lint": "eslint ./"
   },
   "repository": {
@@ -37,7 +34,7 @@
   },
   "devDependencies": {
     "c8": "7.7.1",
-    "coveralls": "3.0.6",
+    "coveralls": "3.1.0",
     "eslint": "4.19.1",
     "eslint-config-airbnb-base": "12.1.0",
     "eslint-plugin-import": "2.18.2",
