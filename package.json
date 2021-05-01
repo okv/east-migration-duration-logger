@@ -37,7 +37,8 @@
     "eslint-config-airbnb-base": "12.1.0",
     "eslint-plugin-import": "2.18.2",
     "tap-summary": "4.0.0",
-    "tape": "5.2.2"
+    "tape": "5.2.2",
+    "tape-catch": "1.0.6"
   },
   "engines": {
     "node": ">=4.0.0"

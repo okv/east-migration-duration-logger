@@ -1,6 +1,6 @@
 'use strict';
 
-const test = require('tape');
+const test = require('tape-catch');
 const libModule = require('../lib');
 
 test('Lib: module', (assert) => {
