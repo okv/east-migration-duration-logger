@@ -4,12 +4,8 @@
   "description": "East plugin which logs duration of every migration",
   "main": "lib/index.js",
   "scripts": {
-    "testSpecified": "tap --reporter spec --no-coverage --color --timeout 10 --bail --jobs-auto",
-    "test": "npm run testSpecified test",
-    "testWithNode": "for file in `find test -name *.js`; do node \"$file\" || exit 1; done;",
-    "makeTestSnapshots": "TAP_SNAPSHOT=1 npm run testSpecified test",
-    "makeCodeCoverageDetailReport": "npm run testSpecified test -- --reporter dot --coverage --coverage-report html --no-browser test && echo \"*** Code coverage report done, checkout ./coverage dir\"",
-    "makeCodeCoverageSummaryReport": "npm run testSpecified test -- --reporter dot --coverage --coverage-report text-summary test | sed -re 's/(Statements|Branches|Functions|Lines)/\\1 code coverage/g'",
+    "test": "tape \"test/**/*.test.js\" | tap-summary",
+    "coverage": "c8 --reporter text-summary --reporter html --reporter lcov npm test",
     "lint": "eslint ./"
   },
   "repository": {
@@ -35,12 +31,14 @@
     "east": ">=1.2.0-rc.1 <3.0.0"
   },
   "devDependencies": {
-    "coveralls": "3.0.6",
+    "c8": "7.7.1",
+    "coveralls": "3.1.0",
     "eslint": "4.19.1",
     "eslint-config-airbnb-base": "12.1.0",
     "eslint-plugin-import": "2.18.2",
-    "expect.js": "0.3.1",
-    "tap": "12.7.0"
+    "tap-summary": "4.0.0",
+    "tape": "5.2.2",
+    "tape-catch": "1.0.6"
   },
   "engines": {
     "node": ">=4.0.0"

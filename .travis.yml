@@ -15,30 +15,10 @@ script:
       nodeVersionMajor=`node -e "console.log(process.versions.node.split('.')[0])"`;
 
       if [ $nodeVersionMajor -eq 14 ]; then
-        npm audit --prod;
-      else
-        echo "*** Do not run \`npm audit\` for non node.js 14 builds ($nodeVersionMajor)";
-      fi;
-
-    - npm run lint
-
-    - >
-      nodeVersionMajor=`node -e "console.log(process.versions.node.split('.')[0])"`;
-
-      if [ $nodeVersionMajor -gt 4 ]; then
+        npm run lint;
         npm test;
-      else
-        npm run testWithNode;
-      fi;
-
-    - >
-      nodeVersionMajor=`node -e "console.log(process.versions.node.split('.')[0])"`;
-
-      if [ $nodeVersionMajor -eq 14 ]; then
-        npm run makeCodeCoverageSummaryReport;
-        npm run makeCodeCoverageDetailReport;
+        npm run coverage;
         coveralls < coverage/lcov.info;
       else
-        echo "*** Do not make coverage reports for non node.js 14 builds ($nodeVersionMajor)";
+        npm run test;
       fi;
-

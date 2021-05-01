@@ -5,6 +5,5 @@ testUtils
 .eslintignore
 .eslintrc.json
 .travis.yml
-.nyc_output
 coverage
-.nycrc
+.c8rc
